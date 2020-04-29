@@ -1,0 +1,19 @@
+{
+  "name": "homework",
+  "version": "0.0.0",
+  "description": "a simple homework bot",
+  "main": "hw.js",
+  "scripts": {
+    "test": "node hw"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "homework"
+  ],
+  "author": "retrogtrade",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  }
+}
