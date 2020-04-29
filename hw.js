@@ -7,7 +7,7 @@ var discord=require("discord.js");
 var bot = new discord.Client("");
 let commands={};
 commands["homework"]=function(message,args){
-	if(!(args[0]&&args[1]])){
+	if(!(args[0]&&args[1])){
 		return "Give me something VALID to add. I thought bots were supposed to be more stupid than you.";
 	}
 	hwentries.push(new Homework(args[0],args[1],args.slice(2).join(" ")));
