@@ -8,7 +8,7 @@ var bot = new discord.Client("");
 let commands={};
 commands["homework"]=function(message,args){
 	if(!(args[0]&&args[1])){
-		return list(message,args);
+		return commands.list(message,args);
 	}
 	hwentries.push(new Homework(args[0],args[1],args.slice(2).join(" ")));
 	console.log(hwentries);
