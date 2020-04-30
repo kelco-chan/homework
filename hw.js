@@ -68,7 +68,7 @@ function updateDB(l){
 	var list=[...l];
 	if(list.length>0){
 		i=list[0];
-		pool.query(`INSERT INTO homework VALUES (${i.type}, ${i.due}, ${i.description},${i.dueMS},${i.id})`)
+		pool.query(`INSERT INTO homework VALUES (\'${i.type}\', ${i.due}, \'${i.description}\',${i.dueMS},${i.id})`)
 			.then((e)=>{
 				console.log(`Updates list element`);
 				updateDB(list.shift());
