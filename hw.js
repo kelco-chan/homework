@@ -22,7 +22,23 @@ class Homework {
 		return str;
 	}
 }
-
+function load(){
+	pool.query('SELECT * FROM homework', (err, res) => {
+		if (err){
+			console.warn(err);
+			return;
+		}
+		// reset entries
+		hwentries=[];
+		for(let i=0;i<res.rows.length;i++){
+			//turn them to be out vip guests
+			let curr = res.rows[i];
+			hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
+		}
+		console.log("loading");
+		console.log(hwentries);
+	});
+}
 
 /***************************
 Commands list
@@ -40,9 +56,14 @@ commands["test"]=function(message,args){
 	return "Beep Boop. Boop Beep?"
 };
 commands["delete"]=function(message,args){
-	pool.query("DELETE FROM homework WHERE id = "+args[0]+";")
-		.then(function(){
+	console.log(args);
+	let q="DELETE FROM homework WHERE id="+args[0]+";";
+	console.log("delete query:" + q);
+	pool.query(q)
+		.then(function(res){
 			console.log("deleted");
+			console.log(res);
+			load();
 		})
 		.catch(function (e) {
 			console.warn(e);
@@ -74,7 +95,8 @@ pool.on('error', (err, client) => {
 });
 function updateDB(l){
 	var i={};
-	var list=l.slice();
+	console.log(typeof l);
+	var list=JSON.parse(JSON.stringify(l));
 	if(list.length>0){
 		i=list[0];
 		pool.query(`INSERT INTO homework VALUES (\'${i.type}\', ${i.due}, \'${i.description}\',${i.dueMS},${i.id})`)
@@ -87,25 +109,9 @@ function updateDB(l){
 }
 //load in prev thingy
 
-
-pool.query('SELECT * FROM homework', (err, res) => {
-	if (err){
-		console.warn(err);
-		return;
-	}
-	for(let i=0;i<res.rows.length;i++){
-		//turn them to be out vip guests
-		let curr = res.rows[i];
-		hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
-	}
-	console.log(hwentries);
-})
-
-
+load();
 
 //actual bot
-
-
 bot.on("message", async message => {
 	if((message.author.bot)||(message.channel.type==="dm")){
 		return;
