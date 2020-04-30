@@ -5,12 +5,31 @@ let prefix ="$"
 var hwentries=[];
 var discord=require("discord.js");
 var bot = new discord.Client("");
+const { Pool, Client } = require('pg');
+const pool = new Pool();
 let commands={};
+class Homework {
+	constructor(type,due,description,entryNumber){
+		this.type=type;
+		this.due=due;
+		this.description=description;
+		this.dueMS=Date.now() + due*day;
+		this.id=id;
+	}
+	toString(){
+		return "Type: "+this.type+"\n"+"Due in "+this.due+" day(s).\n"+"What you need to do: "+this.description+"\n";
+	}
+}
+
+
+/***************************
+Commands list
+****************************/
 commands["homework"]=function(message,args){
 	if(!(args[0]&&args[1])){
 		return commands.list(message,args);
 	}
-	hwentries.push(new Homework(args[0],args[1],args.slice(2).join(" "), hwentries.length));
+	hwentries.push(new Homework(args[0],args[1],args.slice(2).join(" "), Date.now()));
 	console.log(hwentries);
 	updateDB(hwentries);
 	return hwentries[hwentries.length-1].toString();
@@ -29,24 +48,29 @@ commands["change-prefix"]=function(message,args){
 	prefix=args[0];
 	return `Prefix changed to ${prefix}`
 }
-bot.on("ready", async ()=> {
-	console.log("Bot is ready");
+
+/*************************
+Pool data info
+*************************/
+
+pool.on('error', (err, client) => {
+  console.error('Unexpected error on idle client', err);
 });
 function updateDB(list){
-	;
-}
-class Homework {
-	constructor(type,due,description,entryNumber){
-		this.type=type;
-		this.due=due;
-		this.description=description;
-		this.dueMS=Date.now() + due*day;
-		this.entryNumber=entryNumber;
-	}
-	toString(){
-		return "Type: "+this.type+"\n"+"Due in "+this.due+" day(s).\n"+"What you need to do: "+this.description+"\n";
+	if(list.length>0){
+		pool.query("INSERT INTO homework VALUES (\'$1\',$2,\'$3\',$4,$5)",[list[0].type,list[0].due,list[0].description,list[0].dueMS,list[0].id ]);
+			.then((e)=>{
+				console.log(`Updates list element`);
+				updateDB(list.shift());
+			});
+		.catch((e)=>{console.warn(e)});
 	}
 }
+
+
+//actual bot
+
+
 bot.on("message", async message => {
 	if((message.author.bot)||(message.channel.type==="dm")){
 		return;
@@ -77,4 +101,7 @@ setInterval(function(){
 
 },1000*60);
 
+bot.on("ready", async ()=> {
+	console.log("Bot is ready");
+});
 bot.login(process.env.BOT_TOKEN);
