@@ -103,7 +103,7 @@ bot.on("message", async message => {
 });
 setInterval(function(){
 	for(var i=0;i<hwentries.length;i++){
-		if((hwentries[i].dueMS+day)<(hwentires[i].due*day+Date.now())){
+		if((hwentries[i].dueMS+day)<(hwentries[i].due*day+Date.now())){
 			//update the due tag;
 			hwentries[i].due=Math.round((Date.now()-hwentries[i].dueMS)/day);
 			updateDB(hwentries);
