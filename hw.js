@@ -41,10 +41,10 @@ commands["test"]=function(message,args){
 };
 commands["list"]=function(message,args){
 	var prnt=" ";
-	for(var j=0;j<hwentries.length;j++){
+	hwentries.forEach(function(j){
 		prnt+="\nEntry "+ (j+1).toString() +": \n"+hwentries[j].toString()+" \n";
-		console.log("PRINT:  "+prnt);
-	}
+		console.log("foreach")
+	});
 	console.log("printing in progress");
 	return prnt;
 }
