@@ -39,6 +39,15 @@ commands["homework"]=function(message,args){
 commands["test"]=function(message,args){
 	return "Beep Boop. Boop Beep?"
 };
+commands["delete"]=function(message,args){
+	try{
+		await pool.query(`DELETE FROM homework WHERE id=${args[0]}`);
+		return "ofc i deleted that entry"
+	}catch(e){
+		console.log(e);
+		return "Hell na. We fail";
+	};
+}
 commands["list"]=function(message,args){
 	var prnt=" ";
 	var j={};
