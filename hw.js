@@ -76,6 +76,17 @@ function updateDB(l){
 		.catch((e)=>{console.warn(e)});
 	}
 }
+//load in prev thingy
+try{
+	console.log("fetchstart")
+	hwentries=(await pool.query('SELECT * FROM homework')).rows;
+	consoel.log(hwentries)
+	console.log('fetchend')
+}catch(e){
+	console.log('failed to fetch');
+}
+
+
 
 
 //actual bot
