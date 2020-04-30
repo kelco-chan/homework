@@ -42,6 +42,7 @@ commands["list"]=function(message,args){
 	for(var i=0;i<hwentries.length;i++){
 		prnt+="\nEntry "+(i+1)+": \n"+hwentries[i].toString()+" \n";
 	}
+	console.log("printing in progress");
 	return prnt;
 }
 commands["change-prefix"]=function(message,args){
@@ -84,6 +85,7 @@ bot.on("message", async message => {
 		let args = message.content.split(" ").slice(1);
 		if (commands.hasOwnProperty(command)){
 			output=commands[command](message,args);
+			console.log(`command ${command} executed`);
 		}
 		//logging output
 		if(output){
