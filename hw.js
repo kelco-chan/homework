@@ -85,6 +85,7 @@ pool.query('SELECT * FROM homework', (err, res) => {
 		return;
 	}
 	hwentries=res.rows;
+	console.log(hwentries);
 })
 
 
