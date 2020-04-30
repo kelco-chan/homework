@@ -39,7 +39,7 @@ commands["homework"]=function(message,args){
 commands["test"]=function(message,args){
 	return "Beep Boop. Boop Beep?"
 };
-commands["delete"]=function(message,args){
+commands["delete"]=async function(message,args){
 	try{
 		await pool.query(`DELETE FROM homework WHERE id=${args[0]}`);
 		return "ofc i deleted that entry"
@@ -112,7 +112,7 @@ bot.on("message", async message => {
 		let command = message.content.split(" ")[0].substring(prefix.length);
 		let args = message.content.split(" ").slice(1);
 		if (commands.hasOwnProperty(command)){
-			output=commands[command](message,args);
+			output= await commands[command](message,args);
 			console.log(`command ${command} executed`);
 		}
 		//logging output
