@@ -45,7 +45,7 @@ commands["list"]=function(message,args){
 	console.log("loopstart");
 	console.log(hwentries);
 	for(j in hwentries){
-		prnt+=`\n Homework ${j.id} :\n ${j.toString()} \n`;
+		prnt+=`\n Homework ${hwentries[j].id} :\n ${hwentries[j].toString()} \n`;
 		console.log("looping")
 	}
 	console.log("loopend");
