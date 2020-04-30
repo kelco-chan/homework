@@ -28,6 +28,8 @@ function load(){
 			console.warn(err);
 			return;
 		}
+		// reset entries
+		hwentries=[];
 		for(let i=0;i<res.rows.length;i++){
 			//turn them to be out vip guests
 			let curr = res.rows[i];
