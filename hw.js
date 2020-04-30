@@ -57,9 +57,8 @@ commands["delete"]=function(message,args){
 	let q="DELETE FROM homework WHERE id="+args[0]+";";
 	console.log("delete query:" + q);
 	var msg=message;
-	pending.then(function(res){
-		console.log(msg);
-		console.log("attempt")
+	pending.then((res)=>{
+		msg.reply("Done. Deleted 1 message.");
 	})
 	.catch(function (e) {
 		console.warn(e);
