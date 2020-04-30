@@ -9,11 +9,11 @@ const { Pool, Client } = require('pg');
 const pool = new Pool();
 let commands={};
 class Homework {
-	constructor(type,due,description,id){
+	constructor(type,due,description,id,dueMS){
 		this.type=type;
 		this.due=due;
 		this.description=description;
-		this.dueMS=Date.now() + due*day;
+		this.dueMS=(dueMS?dueMS:(Date.now() + due*day));
 		this.id=id;
 	}
 	toString(){
@@ -93,7 +93,11 @@ pool.query('SELECT * FROM homework', (err, res) => {
 		console.warn(err);
 		return;
 	}
-	hwentries=res.rows;
+	for(let i=0;i<res.rows.length;i++){
+		//turn them to be out vip guests
+		let curr = res.rows[i];
+		hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
+	}
 	console.log(hwentries);
 })
 
