@@ -35,6 +35,7 @@ function load(){
 			let curr = res.rows[i];
 			hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
 		}
+		console.log("loading");
 		console.log(hwentries);
 	});
 }
@@ -94,7 +95,8 @@ pool.on('error', (err, client) => {
 });
 function updateDB(l){
 	var i={};
-	var list=l.slice();
+	console.log(typeof l);
+	var list=JSON.parse(JSON.stringify(l));
 	if(list.length>0){
 		i=list[0];
 		pool.query(`INSERT INTO homework VALUES (\'${i.type}\', ${i.due}, \'${i.description}\',${i.dueMS},${i.id})`)
