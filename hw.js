@@ -42,7 +42,8 @@ commands["test"]=function(message,args){
 commands["list"]=function(message,args){
 	var prnt=" ";
 	var j={};
-	console.log("loopstart")
+	console.log("loopstart");
+	console.log(hwentries);
 	for(j in hwentries){
 		prnt+=": \n"+hwentries[j].toString()+" \n";
 		console.log("looping")
