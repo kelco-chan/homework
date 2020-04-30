@@ -37,7 +37,6 @@ function load(){
 		console.log(hwentries);
 	});
 }
-
 /***************************
 Commands list
 ****************************/
@@ -61,7 +60,6 @@ commands["delete"]=function(message,args){
 		.then(function(res){
 			console.log("deleted");
 			console.log(res);
-			load();
 		})
 		.catch(function (e) {
 			console.warn(e);
@@ -107,9 +105,25 @@ function updateDB(l){
 }
 //load in prev thingy
 
-load();
+
+pool.query('SELECT * FROM homework', (err, res) => {
+	if (err){
+		console.warn(err);
+		return;
+	}
+	for(let i=0;i<res.rows.length;i++){
+		//turn them to be out vip guests
+		let curr = res.rows[i];
+		hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
+	}
+	console.log(hwentries);
+})
+
+
 
 //actual bot
+
+
 bot.on("message", async message => {
 	if((message.author.bot)||(message.channel.type==="dm")){
 		return;
