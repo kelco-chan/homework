@@ -62,7 +62,7 @@ function updateDB(list){
 			.then((e)=>{
 				console.log(`Updates list element`);
 				updateDB(list.shift());
-			});
+			})
 		.catch((e)=>{console.warn(e)});
 	}
 }
