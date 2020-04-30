@@ -78,17 +78,14 @@ function updateDB(l){
 }
 //load in prev thingy
 
-(function (){
- 	try{
-		console.log("fetchstart")
-		hwentries=(await pool.query('SELECT * FROM homework')).rows;
-		console.log(hwentries)
-		console.log('fetchend')
-	}catch(e){
-		console.log('failed to fetch');
-	}
-})();
 
+pool.query('SELECT * FROM homework', (err, res) => {
+	if (err){
+		console.warn(err);
+		return;
+	}
+	hwentries=res.rows;
+})
 
 
 
