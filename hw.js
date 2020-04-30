@@ -40,8 +40,9 @@ commands["test"]=function(message,args){
 	return "Beep Boop. Boop Beep?"
 };
 commands["delete"]=function(message,args){
+	console.log(args);
 	let q="DELETE FROM homework WHERE id="+args[0]+";";
-	console.log(q);
+	console.log("delete query:" + q);
 	pool.query(q)
 		.then(function(res){
 			console.log("deleted");
