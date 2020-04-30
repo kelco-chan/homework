@@ -41,8 +41,8 @@ commands["test"]=function(message,args){
 };
 commands["list"]=function(message,args){
 	var prnt=" ";
-	for(var i=0;i<hwentries.length;i++){
-		prnt+="\nEntry "+ (i+1).toString() +": \n"+hwentries[i].toString()+" \n";
+	for(var j=0;j<hwentries.length;j++){
+		prnt+="\nEntry "+ (j+1).toString() +": \n"+hwentries[j].toString()+" \n";
 		console.log("PRINT:  "+prnt);
 	}
 	console.log("printing in progress");
