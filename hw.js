@@ -9,7 +9,7 @@ const { Pool, Client } = require('pg');
 const pool = new Pool();
 let commands={};
 class Homework {
-	constructor(type,due,description,entryNumber){
+	constructor(type,due,description,id){
 		this.type=type;
 		this.due=due;
 		this.description=description;
@@ -29,7 +29,7 @@ commands["homework"]=function(message,args){
 	if(!(args[0]&&args[1])){
 		return commands.list(message,args);
 	}
-	hwentries.push(new Homework(args[0],args[1],args.slice(2).join(" "), Date.now()));
+	hwentries.push(new Homework(args[0],parseInt(args[1]),args.slice(2).join(" "), Date.now()));
 	console.log(hwentries);
 	updateDB(hwentries);
 	return hwentries[hwentries.length-1].toString();
