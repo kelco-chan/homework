@@ -17,7 +17,9 @@ class Homework {
 		this.id=id;
 	}
 	toString(){
-		return "Type: "+this.type+"\n"+"Due in "+this.due.toString()+" day(s).\n"+"What you need to do: "+this.description+"\n";
+		var str="Type: "+this.type+"\n"+"Due in "+this.due.toString()+" day(s).\n"+"What you need to do: "+this.description+"\n"
+		console.log(str);
+		return str;
 	}
 }
 
