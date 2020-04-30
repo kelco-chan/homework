@@ -63,8 +63,9 @@ Pool data info
 pool.on('error', (err, client) => {
   console.error('Unexpected error on idle client', err);
 });
-function updateDB(list){
+function updateDB(l){
 	var i={};
+	var list=[...l];
 	if(list.length>0){
 		i=list[0];
 		pool.query(`INSERT INTO homework VALUES (${i.type}, ${i.due}, ${i.description},${i.dueMS},${i.id})`)
