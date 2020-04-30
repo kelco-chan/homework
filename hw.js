@@ -17,7 +17,7 @@ class Homework {
 		this.id=id;
 	}
 	toString(){
-		return "Type: "+this.type+"\n"+"Due in "+this.due+" day(s).\n"+"What you need to do: "+this.description+"\n";
+		return "Type: "+this.type+"\n"+"Due in "+this.due.toString()+" day(s).\n"+"What you need to do: "+this.description+"\n";
 	}
 }
 
@@ -38,9 +38,10 @@ commands["test"]=function(message,args){
 	return "Beep Boop. Boop Beep?"
 };
 commands["list"]=function(message,args){
-	var prnt="";
+	var prnt=" ";
 	for(var i=0;i<hwentries.length;i++){
-		prnt+="\nEntry "+(i+1)+": \n"+hwentries[i].toString()+" \n";
+		prnt+="\nEntry "+ (i+1).toString() +": \n"+hwentries[i].toString()+" \n";
+		console.log("PRINT:  "+prnt);
 	}
 	console.log("printing in progress");
 	return prnt;
