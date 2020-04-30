@@ -28,8 +28,6 @@ function load(){
 			console.warn(err);
 			return;
 		}
-		// reset entries
-		hwentries=[];
 		for(let i=0;i<res.rows.length;i++){
 			//turn them to be out vip guests
 			let curr = res.rows[i];
@@ -39,7 +37,6 @@ function load(){
 		console.log(hwentries);
 	});
 }
-
 /***************************
 Commands list
 ****************************/
@@ -59,15 +56,15 @@ commands["delete"]=function(message,args){
 	console.log(args);
 	let q="DELETE FROM homework WHERE id="+args[0]+";";
 	console.log("delete query:" + q);
-	pool.query(q)
-		.then(function(res){
-			console.log("deleted");
-			console.log(res);
-			load();
-		})
-		.catch(function (e) {
-			console.warn(e);
-		});
+	let pending=pool.query(q);
+	pending.msg=message;
+	pending.then(function(res){
+		console.log("deleted");
+		res.msg.channel.send("deleted 1 homework entry");
+	})
+	.catch(function (e) {
+		console.warn(e);
+	});
 };
 commands["list"]=function(message,args){
 	var prnt=" ";
@@ -78,6 +75,9 @@ commands["list"]=function(message,args){
 		prnt+=`\n Homework ${hwentries[j].id} :\n ${hwentries[j].toString()} \n`;
 		console.log("looping")
 	}
+	if(hwentries.length=0){
+		prnt="There are no homework items.";
+	}
 	console.log("loopend");
 	return prnt;
 }
@@ -85,7 +85,13 @@ commands["change-prefix"]=function(message,args){
 	prefix=args[0];
 	return `Prefix changed to ${prefix}`
 }
-
+//shortcuts
+commands["hw"]=function(message,args){
+	return commands.homework(message,args);
+}
+commands["del"]=function(message,args){
+	return commands.delete(message,args);
+}
 /*************************
 Pool data info
 *************************/
@@ -109,9 +115,25 @@ function updateDB(l){
 }
 //load in prev thingy
 
-load();
+
+pool.query('SELECT * FROM homework', (err, res) => {
+	if (err){
+		console.warn(err);
+		return;
+	}
+	for(let i=0;i<res.rows.length;i++){
+		//turn them to be out vip guests
+		let curr = res.rows[i];
+		hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
+	}
+	console.log(hwentries);
+})
+
+
 
 //actual bot
+
+
 bot.on("message", async message => {
 	if((message.author.bot)||(message.channel.type==="dm")){
 		return;
