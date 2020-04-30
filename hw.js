@@ -56,11 +56,10 @@ commands["delete"]=function(message,args){
 	console.log(args);
 	let q="DELETE FROM homework WHERE id="+args[0]+";";
 	console.log("delete query:" + q);
-	let pending=pool.query(q);
-	pending.msg=message;
+	var msg=message;
 	pending.then(function(res){
-		console.log("deleted");
-		res.msg.channel.send("deleted 1 homework entry");
+		console.log(msg);
+		console.log("attempt")
 	})
 	.catch(function (e) {
 		console.warn(e);
