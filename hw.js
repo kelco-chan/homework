@@ -1,6 +1,6 @@
 
 //HOMEWORK REVIEW - Kelvin Chan
-
+var day=24*60*60*1000;
 let prefix ="$"
 var hwentries=[];
 var discord=require("discord.js");
@@ -10,8 +10,9 @@ commands["homework"]=function(message,args){
 	if(!(args[0]&&args[1])){
 		return commands.list(message,args);
 	}
-	hwentries.push(new Homework(args[0],args[1],args.slice(2).join(" ")));
+	hwentries.push(new Homework(args[0],args[1],args.slice(2).join(" "), hwentries.length));
 	console.log(hwentries);
+	updateDB(hwentries);
 	return hwentries[hwentries.length-1].toString();
 }
 commands["test"]=function(message,args){
@@ -31,13 +32,16 @@ commands["change-prefix"]=function(message,args){
 bot.on("ready", async ()=> {
 	console.log("Bot is ready");
 });
-
+function updateDB(list){
+	;
+}
 class Homework {
-	constructor(type,due,description){
+	constructor(type,due,description,entryNumber){
 		this.type=type;
 		this.due=due;
 		this.description=description;
-		this.dueMS=Date.now() + due*24*60*60*1000;
+		this.dueMS=Date.now() + due*day;
+		this.entryNumber=entryNumber;
 	}
 	toString(){
 		return "Type: "+this.type+"\n"+"Due in "+this.due+" day(s).\n"+"What you need to do: "+this.description+"\n";
@@ -62,4 +66,15 @@ bot.on("message", async message => {
 		
 	}
 });
+setInterval(function(){
+	for(var i=0;i<hwentries.length;i++){
+		if((hwentries[i].dueMS+day)<(hwentires[i].due*day+Date.now())){
+			//update the due tag;
+			hwentries[i].due=Math.round((Date.now()-hwentries[i].dueMS)/day);
+			updateDB(hwentries);
+		}
+	}
+
+},1000*60);
+
 bot.login(process.env.BOT_TOKEN);
