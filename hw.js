@@ -74,7 +74,7 @@ pool.on('error', (err, client) => {
 });
 function updateDB(l){
 	var i={};
-	var list=[...l];
+	var list=l.slice();
 	if(list.length>0){
 		i=list[0];
 		pool.query(`INSERT INTO homework VALUES (\'${i.type}\', ${i.due}, \'${i.description}\',${i.dueMS},${i.id})`)
