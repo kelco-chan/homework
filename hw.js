@@ -41,11 +41,13 @@ commands["test"]=function(message,args){
 };
 commands["list"]=function(message,args){
 	var prnt=" ";
-	hwentries.forEach(function(j){
-		prnt+="\nEntry "+ (j+1).toString() +": \n"+hwentries[j].toString()+" \n";
-		console.log("foreach")
-	});
-	console.log("printing in progress");
+	var j={};
+	console.log("loopstart")
+	for(j in hwentries){
+		prnt+=": \n"+hwentries[j].toString()+" \n";
+		console.log("looping")
+	}
+	console.log("loopend");
 	return prnt;
 }
 commands["change-prefix"]=function(message,args){
