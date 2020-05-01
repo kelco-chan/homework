@@ -62,6 +62,7 @@ commands["delete"]=async function(message,args){
 		msg.reply("deleted");
 	}catch(e){
 		msg.reply("fail");
+		console.log(e);
 	}
 };
 commands["list"]=async function(message,args){
