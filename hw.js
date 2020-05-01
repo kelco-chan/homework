@@ -57,6 +57,7 @@ commands["delete"]=async function(message,args){
 	let q="DELETE FROM homework WHERE id="+args[0]+";";
 	console.log("delete query:" + q);
 	var msg=message;
+	var pending = pool.query(q);
 	try{
 		await pending;
 		msg.reply("deleted");
