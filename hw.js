@@ -71,13 +71,13 @@ commands["delete"]=async function(message,args){
 	}
 };
 commands["list"]=async function(message,args){
-	var prnt=" ";
-	var j={};
+	var prnt="";
+	
 	console.log("loopstart");
 	console.log(hwentries);
-	for(j in hwentries){
+	for(var j=0;j<hwentries.length;j++){
 		prnt+=`\n Homework ${hwentries[j].id} :\n ${hwentries[j].toString()} \n`;
-		console.log("looping")
+		console.log("looping");
 	}
 	if(hwentries.length=0){
 		prnt="There are no homework items.";
@@ -94,7 +94,6 @@ commands["hw"]=function(message,args){
 	return commands.homework(message,args);
 }
 commands["del"]=async function(message,args){
-
 	return commands.delete(message,args);
 }
 /*************************
