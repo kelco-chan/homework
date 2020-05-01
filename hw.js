@@ -40,7 +40,7 @@ function load(){
 /***************************
 Commands list
 ****************************/
-commands["homework"]=function(message,args){
+commands["homework"]=async function(message,args){
 	if(!(args[0]&&args[1])){
 		return commands.list(message,args);
 	}
@@ -49,22 +49,22 @@ commands["homework"]=function(message,args){
 	updateDB(hwentries);
 	return hwentries[hwentries.length-1].toString();
 }
-commands["test"]=function(message,args){
+commands["test"]=async function(message,args){
 	return "Beep Boop. Boop Beep?"
 };
-commands["delete"]=function(message,args){
+commands["delete"]=async function(message,args){
 	console.log(args);
 	let q="DELETE FROM homework WHERE id="+args[0]+";";
 	console.log("delete query:" + q);
 	var msg=message;
-	pending.then((res)=>{
-		msg.reply("Done. Deleted 1 message.");
-	})
-	.catch(function (e) {
-		console.warn(e);
-	});
+	try{
+		await pending;
+		msg.reply("deleted");
+	}catch(e){
+		msg.reply("fail");
+	}
 };
-commands["list"]=function(message,args){
+commands["list"]=async function(message,args){
 	var prnt=" ";
 	var j={};
 	console.log("loopstart");
@@ -79,15 +79,15 @@ commands["list"]=function(message,args){
 	console.log("loopend");
 	return prnt;
 }
-commands["change-prefix"]=function(message,args){
+commands["change-prefix"]=async function(message,args){
 	prefix=args[0];
 	return `Prefix changed to ${prefix}`
 }
 //shortcuts
-commands["hw"]=function(message,args){
+commands["hw"]=async function(message,args){
 	return commands.homework(message,args);
 }
-commands["del"]=function(message,args){
+commands["del"]=async function(message,args){
 	return commands.delete(message,args);
 }
 /*************************
@@ -142,7 +142,7 @@ bot.on("message", async message => {
 		let command = message.content.split(" ")[0].substring(prefix.length);
 		let args = message.content.split(" ").slice(1);
 		if (commands.hasOwnProperty(command)){
-			output= commands[command](message,args);
+			output= await commands[command](message,args);
 			console.log(`command ${command} executed`);
 		}
 		//logging output
