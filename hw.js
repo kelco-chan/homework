@@ -160,7 +160,7 @@ function loadIntoRAM(){
 		});
 	});
 }
-loadIntoRAM.then(function(){
+loadIntoRAM().then(function(){
 	console.log(hwentries);
 }).catch(function(e){
 	console.warn(e)
