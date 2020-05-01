@@ -71,6 +71,9 @@ commands["delete"]=async function(message,args){
 	}
 };
 commands["list"]=async function(message,args){
+	if(hwentries.length==0){
+		return "There are no homework items.";
+	}
 	var prnt="";
 	
 	console.log("loopstart");
@@ -79,7 +82,7 @@ commands["list"]=async function(message,args){
 		prnt+=`\n Homework ${hwentries[j].id} :\n ${hwentries[j].toString()} \n`;
 		console.log("looping");
 	}
-	if(hwentries.length=0){
+	if(hwentries.length==0){
 		prnt="There are no homework items.";
 	}
 	console.log("loopend");
