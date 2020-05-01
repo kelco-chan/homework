@@ -69,6 +69,8 @@ commands["delete"]=async function(message,args){
 		msg.reply("fail");
 		console.log(e);
 	}
+	await loadIntoRAM();
+	console.log("loaded into ram");
 };
 commands["list"]=async function(message,args){
 	if(hwentries.length==0){
@@ -141,21 +143,28 @@ function updateDBPromise(l){
 	})
 }
 //load in prev thingy
-
-
-pool.query('SELECT * FROM homework', (err, res) => {
-	if (err){
-		console.warn(err);
-		return;
-	}
-	for(let i=0;i<res.rows.length;i++){
-		//turn them to be out vip guests
-		let curr = res.rows[i];
-		hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
-	}
+function loadIntoRAM(){
+	return new Promise(function (resolve,reject){
+		pool.query('SELECT * FROM homework', (err, res) => {
+			if (err){
+				//console.warn(err);
+				reject("THERE IS A BIG ERROR YOU DUMASS");
+			}
+			for(let i=0;i<res.rows.length;i++){
+				//turn them to be out vip guests
+				let curr = res.rows[i];
+				hwentries.push(new Homework(curr.type, curr.due, curr.description, curr.id, curr.duems));
+			}
+			//console.log(hwentries);
+			resolve("finish loading");
+		});
+	});
+}
+loadIntoRAM.then(function(){
 	console.log(hwentries);
+}).catch(function(e){
+	console.warn(e)
 })
-
 
 
 //actual bot
