@@ -46,8 +46,12 @@ commands["homework"]=function(message,args){
 	}
 	hwentries.push(new Homework(args[0],parseInt(args[1]),args.slice(2).join(" "), Date.now()));
 	console.log(hwentries);
-	updateDB(hwentries);
-	return hwentries[hwentries.length-1].toString();
+	try{
+		message.reply(await updateDBPromise(hwentries));
+		return hwentries[hwentries.length-1].toString();
+	}catch(e){
+		message.reply("failed to add homework entry");
+	}
 }
 commands["test"]=function(message,args){
 	return "Beep Boop. Boop Beep?"
@@ -56,14 +60,15 @@ commands["delete"]=function(message,args){
 	console.log(args);
 	let q="DELETE FROM homework WHERE id="+args[0]+";";
 	console.log("delete query:" + q);
-	pool.query(q)
-		.then(function(res){
-			console.log("deleted");
-			console.log(res);
-		})
-		.catch(function (e) {
-			console.warn(e);
-		});
+	let pending=pool.query(q);
+	pending.msg=message;
+	pending.then(function(res){
+		
+		console.log("attempt")
+	})
+	.catch(function (e) {
+		console.warn(e);
+	});
 };
 commands["list"]=function(message,args){
 	var prnt=" ";
@@ -74,6 +79,9 @@ commands["list"]=function(message,args){
 		prnt+=`\n Homework ${hwentries[j].id} :\n ${hwentries[j].toString()} \n`;
 		console.log("looping")
 	}
+	if(hwentries.length=0){
+		prnt="There are no homework items.";
+	}
 	console.log("loopend");
 	return prnt;
 }
@@ -81,7 +89,13 @@ commands["change-prefix"]=function(message,args){
 	prefix=args[0];
 	return `Prefix changed to ${prefix}`
 }
-
+//shortcuts
+commands["hw"]=function(message,args){
+	return commands.homework(message,args);
+}
+commands["del"]=function(message,args){
+	return commands.delete(message,args);
+}
 /*************************
 Pool data info
 *************************/
@@ -102,6 +116,26 @@ function updateDB(l){
 			})
 		.catch((e)=>{console.warn(e)});
 	}
+}
+function updateDBPromise(l){
+	return new Promise(function(resolve,reject){
+		var i={};
+		console.log(typeof l);
+		var list=JSON.parse(JSON.stringify(l));
+		if(list.length>0){
+			i=list[0];
+			pool.query(`INSERT INTO homework VALUES (\'${i.type}\', ${i.due}, \'${i.description}\',${i.dueMS},${i.id})`)
+			.then((e)=>{
+				console.log(`Updates list element`);
+				updateDB(list.shift());
+				resolve("Homework entries updated");
+			})
+			.catch((e)=>{
+				console.warn(e);
+				reject(e);
+			});
+		};
+	})
 }
 //load in prev thingy
 
